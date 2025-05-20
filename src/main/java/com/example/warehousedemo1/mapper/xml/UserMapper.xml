@@ -5,4 +5,7 @@
     <select id="pageC" resultType="com.example.warehousedemo1.entity.User">
         select * from user
     </select>
+    <select id="pageCC" resultType="com.example.warehousedemo1.entity.User">
+        select * from user ${ew.customSqlSegment}
+    </select>
 </mapper>
