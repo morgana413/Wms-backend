@@ -4,6 +4,7 @@ import ch.qos.logback.core.util.StringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.warehousedemo1.common.QueryPageParam;
+import com.example.warehousedemo1.common.Result;
 import com.example.warehousedemo1.entity.User;
 import com.example.warehousedemo1.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
@@ -56,12 +57,12 @@ public class UserController {
     }
     //查询（模糊，匹配）
     @PostMapping("/listP")
-    public List<User> listP(@RequestBody User user) {
+    public Result listP(@RequestBody User user) {
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         if (StringUtils.isNotBlank(user.getName())){
             queryWrapper.like(User::getName, user.getName());
         }
-        return userService.list(queryWrapper);
+        return Result.SUCCESS(userService.list(queryWrapper));
     }
 
     @PostMapping("/listPage")
