@@ -2,6 +2,7 @@ package com.example.warehousedemo1.controller;
 
 import ch.qos.logback.core.util.StringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.warehousedemo1.common.QueryPageParam;
 import com.example.warehousedemo1.common.Result;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -70,4 +72,21 @@ public class UserController {
         Page<User> page = new Page<>(queryPageParam.getPageNum(), queryPageParam.getPageSize());
         return null;
     }
+    @PostMapping("/listPageC1")
+    public Result listPageC1(@RequestBody QueryPageParam queryPageParam) {
+        HashMap param = queryPageParam.getParam();
+        String name = (String) param.get("name");
+        System.out.println("name===" + (String) param.get("name"));
+        Page<User> page = new Page();
+        page.setCurrent(queryPageParam.getPageNum());
+        page.setSize(queryPageParam.getPageSize());
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.isNotBlank(name)){
+            queryWrapper.like(User::getName, name);
+        }
+        IPage result = userService.pageC(page);
+        System.out.println("total===" + result.getTotal());
+        return Result.SUCCESS(result.getRecords(), result.getTotal());
+    }
+
 }
