@@ -43,6 +43,10 @@ public class UserController {
         return userService.updateById(user)?Result.SUCCESS():Result.FAILURE();
     }
 
+    @GetMapping("/del")
+    public Result deleteUser(@RequestParam String id) {
+        return userService.removeById(id)?Result.SUCCESS():Result.FAILURE();
+    }
     //修改
     @PostMapping("/mod")
     public boolean modUser(@RequestBody User user) {
