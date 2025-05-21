@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.warehousedemo1.common.QueryPageParam;
 import com.example.warehousedemo1.common.Result;
+import com.example.warehousedemo1.entity.Menu;
 import com.example.warehousedemo1.entity.User;
+import com.example.warehousedemo1.service.IMenuService;
 import com.example.warehousedemo1.service.IUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+    @Autowired
+    private IMenuService menuService;
 
     @GetMapping("/list")
     public List<User> getUsers() {
@@ -38,7 +42,15 @@ public class UserController {
         List list = userService.lambdaQuery()
                 .eq(User::getNo,user.getNo())
                 .eq(User::getPassword,user.getPassword()).list();
-        return list.size()>0?Result.SUCCESS(list.get(0)):Result.FAILURE();
+        if (list.size() > 0) {
+            User user1 = (User)list.get(0);
+            List menuList = menuService.lambdaQuery().like(Menu::getMenuRight,user1.getRoleId()).list();
+            HashMap res = new HashMap();
+            res.put("menuList", menuList);
+            res.put("user", user1);
+            return Result.SUCCESS(res);
+        }
+        return Result.FAILURE();
     }
     //新增
     @PostMapping("/save")
