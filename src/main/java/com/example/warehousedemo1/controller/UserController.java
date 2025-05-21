@@ -38,6 +38,10 @@ public class UserController {
     public Result saveUser(@RequestBody User user) {
         return userService.save(user)?Result.SUCCESS():Result.FAILURE();
     }
+    @PostMapping("/update")
+    public Result updateUser(@RequestBody User user) {
+        return userService.updateById(user)?Result.SUCCESS():Result.FAILURE();
+    }
 
     //修改
     @PostMapping("/mod")
