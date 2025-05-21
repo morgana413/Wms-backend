@@ -33,6 +33,13 @@ public class UserController {
     public List<User> getUsers() {
         return userService.list();
     }
+    @PostMapping("/login")
+    public Result login(@RequestBody User user) {
+        List list = userService.lambdaQuery()
+                .eq(User::getNo,user.getNo())
+                .eq(User::getPassword,user.getPassword()).list();
+        return list.size()>0?Result.SUCCESS(list.get(0)):Result.FAILURE();
+    }
     //新增
     @PostMapping("/save")
     public Result saveUser(@RequestBody User user) {
