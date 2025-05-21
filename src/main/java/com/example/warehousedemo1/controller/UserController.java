@@ -1,6 +1,5 @@
 package com.example.warehousedemo1.controller;
 
-import ch.qos.logback.core.util.StringUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -36,8 +35,8 @@ public class UserController {
     }
     //新增
     @PostMapping("/save")
-    public boolean saveUser(@RequestBody User user) {
-        return userService.save(user);
+    public Result saveUser(@RequestBody User user) {
+        return userService.save(user)?Result.SUCCESS():Result.FAILURE();
     }
 
     //修改
@@ -91,6 +90,12 @@ public class UserController {
         IPage result = userService.pageCC(page, queryWrapper);
         System.out.println("total===" + result.getTotal());
         return Result.SUCCESS(result.getRecords(), result.getTotal());
+    }
+
+    @GetMapping("/findByNo")
+    public Result findByNo(@RequestParam String no) {
+        List list = userService.lambdaQuery().eq(User::getNo, no).list();
+        return list.size()>0?Result.SUCCESS(list):Result.FAILURE();
     }
 
 }
