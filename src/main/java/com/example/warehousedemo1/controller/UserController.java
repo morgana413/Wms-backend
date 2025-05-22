@@ -103,6 +103,7 @@ public class UserController {
         HashMap param = queryPageParam.getParam();
         String name = (String) param.get("name");
         String sex = (String) param.get("sex");
+        String roleId = (String) param.get("roleId");
         Page<User> page = new Page();
         page.setCurrent(queryPageParam.getPageNum());
         page.setSize(queryPageParam.getPageSize());
@@ -112,6 +113,9 @@ public class UserController {
         }
         if (StringUtils.isNotBlank(sex)) {
             queryWrapper.eq(User::getSex, sex);
+        }
+        if (StringUtils.isNotBlank(roleId)) {
+            queryWrapper.eq(User::getRoleId, roleId);
         }
        // IPage result = userService.pageC(page);
         IPage result = userService.pageCC(page, queryWrapper);
