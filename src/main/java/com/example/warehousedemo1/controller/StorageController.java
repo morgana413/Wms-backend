@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * <p>
@@ -55,5 +56,10 @@ public class StorageController {
         }
         IPage result = storageService.pageCC(page, queryWrapper);
         return Result.SUCCESS(result.getRecords(), result.getTotal());
+    }
+    @GetMapping("/list")
+    public Result list() {
+        List list = storageService.list();
+        return Result.SUCCESS(list);
     }
 }
