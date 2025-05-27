@@ -16,17 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * <p>
- *  前端控制器
- * </p>
- *
- * @author sino
- * @since 2025-05-19
- */
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("/admin")
+public class AdminCotroller {
 
     @Autowired
     private IUserService userService;
@@ -118,7 +110,7 @@ public class UserController {
         if (StringUtils.isNotBlank(roleId)) {
             queryWrapper.eq(User::getRoleId, roleId);
         }
-       // IPage result = userService.pageC(page);
+        // IPage result = userService.pageC(page);
         IPage result = userService.pageCC(page, queryWrapper);
         System.out.println("total===" + result.getTotal());
         return Result.SUCCESS(result.getRecords(), result.getTotal());
@@ -129,5 +121,4 @@ public class UserController {
         List list = userService.lambdaQuery().eq(User::getNo, no).list();
         return list.size()>0?Result.SUCCESS(list):Result.FAILURE();
     }
-
 }
