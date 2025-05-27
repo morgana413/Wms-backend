@@ -10,6 +10,7 @@ import com.example.warehousedemo1.entity.Goods;
 import com.example.warehousedemo1.entity.Record;
 import com.example.warehousedemo1.entity.Storage;
 import com.example.warehousedemo1.entity.User;
+import com.example.warehousedemo1.service.IGoodsService;
 import com.example.warehousedemo1.service.IRecordService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,8 @@ public class RecordController {
 
     @Autowired
     IRecordService recordService;
+    @Autowired
+    IGoodsService goodsService;
     @PostMapping("/listPage")
     public Result listPage(@RequestBody QueryPageParam queryPageParam) {
         HashMap param = queryPageParam.getParam();
@@ -57,5 +60,19 @@ public class RecordController {
 
         IPage result = recordService.pageCC(page, queryWrapper);
         return Result.SUCCESS(result.getRecords(), result.getTotal());
+    }
+    @PostMapping("/save")
+    public Result saveStorage(@RequestBody Record record) {
+        Goods goods = goodsService.getById(record.getGoods());
+        int n = record.getCount();
+        if("2".equals(record.getAction())){
+            n = -n;
+            record.setCount(n);
+        }
+        int num = goods.getCount() + n;
+        goods.setCount(num);
+        goodsService.updateById(goods);
+
+        return recordService.save(record)?Result.SUCCESS():Result.FAILURE();
     }
 }

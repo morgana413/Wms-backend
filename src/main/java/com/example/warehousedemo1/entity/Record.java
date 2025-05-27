@@ -48,4 +48,7 @@ public class Record implements Serializable {
 
     @ApiModelProperty("备注")
     private String remark;
+
+    @TableField(exist = false)
+    private String action;
 }
